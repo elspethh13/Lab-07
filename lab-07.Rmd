@@ -26,7 +26,16 @@ glimpse(college_grad_df)
 # Exercise 1: Exploratory Data Analysis
 
 ```{r}
-#your code here
+college_grad_median <- college_grad_df |> 
+  select(major_category, median) |> 
+  group_by(major_category) |> 
+  summarise(mean_earnings = mean(median))
+
+ggplot(college_grad_median,
+       aes(x = mean_earnings,
+           fill = major_category)) +
+  geom_histogram(binwidth = 2500) +
+  labs(x = "mean")
 ```
 
 *Your explanation*
@@ -35,15 +44,27 @@ glimpse(college_grad_df)
 # Exercise 2: Exploring relationship
 
 ```{r}
-#your code here
+ggplot(college_grad_df,
+       aes(x = median,
+           y = sharewomen,
+           colour = major_category)) +
+  geom_point() +
+  geom_smooth(method = lm, se = FALSE,
+              colour = NULL) +
+  labs(title = "Percentage of women against median earnings",
+       x = "Median Earnings",
+       y = "Percentage of Women")
 ```
 
-*Your explanation*
+*Negative correlation*
 
 # Exercise 3: Fit and interpret a numerical predictor
 
 ```{r}
-#your code here
+linear_reg() %>%
+  set_engine("lm") %>%
+  fit(sharewomen ~ median, data = college_grad_df) |> 
+  tidy()
 ```
 
 *Your explanation*
